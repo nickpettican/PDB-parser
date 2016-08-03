@@ -60,7 +60,7 @@ def findelement(pdb,busca):
 
 def findindex(pdb,busca):
     # finds what column the query string is
-    datalist = [line.split() for line in data if re.search(busca, line)]
+    datalist = [line.split() for line in pdb if re.search(busca, line)]
     temp = set()
     tempupdate = [temp.add(index) for i, value in enumerate(datalist) 
                   for index, l in enumerate(datalist[i], 1) if re.search(busca, l)]
