@@ -133,7 +133,7 @@ def replace(pdb,busca,cambia):
                     begin = b
                     end = b + len(buscachars)
                     x = 0
-                    for chars in datachars[counter][begin:end]:
+                    for chars in pdbchars[counter][begin:end]:
                         newline.append(char.replace(char, cambiachars[x]))
                         x += 1
             elif charcount not in range(begin, end):
