@@ -61,7 +61,7 @@ def findelement(pdb,busca):
 
 def findrange(pdb,busca):
     rangebusca = [i for i, line in enumerate(pdb) if re.search(busca, line)]
-    return [rangebusca[0], rangebusca[-1] + 2]
+    return [rangebusca[0], rangebusca[-1] + 1]
 
 def findindex(pdb,busca):
     # finds what column the query string is
