@@ -13,4 +13,4 @@ I started this script on the 2nd of August, and as of today, 4th of August (at 3
 
 Feel free to fork it and collaborate! Let us contribute to the advancement of computational biology. I mean, someone has to do it... :metal:
 
-<center><a href="http://www.nicolaspettican.com"><img src="https://raw.githubusercontent.com/nickpettican/SparkzLab/master/img/code_white_small.gif" style="width: 40%; -moz-border-radius: 128px; border-radius: 50%; height: auto; -webkit-border-radius: 50%;"></img></a></center>
+<center><a href="https://github.com/nickpettican/PDB-parse/blob/master/PDBparser.py"><img src="https://raw.githubusercontent.com/nickpettican/SparkzLab/master/img/code_white_small.gif" style="width: 40%; -moz-border-radius: 128px; border-radius: 50%; height: auto; -webkit-border-radius: 50%;"></img></a></center>
