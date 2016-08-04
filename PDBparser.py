@@ -92,7 +92,7 @@ def replacechar(pdb):
             notgood = ", ".join(str(x) for x in indexloc)
             print "\n%s is located in columns %s\nyou may want to double check before proceeding" %(busca, notgood)
             if not continuar():
-                quit()
+                quitsesh()
     except:
         print "\nWoops, can't seem to find %s's location\n" %(busca)
     # THE REPLACING SECTION, under development
@@ -104,10 +104,10 @@ def replacechar(pdb):
         else:
             print ("\nYou can't replace a string of different size...\n" +
                    "it will break the PDB file!\n")
-            quit()
+            quitsesh()
     except:
         print "\nWoops, something went wrong\n"
-        quit()
+        quitsesh()
 
 def replace(pdb,busca,cambia):
     # THE REPLACING FUNCTION, under development
@@ -188,8 +188,8 @@ def continuar():
     # the "are you sure?" function
     return raw_input("\nContinue? [yes|no]\t").lower().startswith('y')
 
-def quit():
-    # quite, of course
+def quitsesh():
+    # quit, of course
     sys.exit("\n\nQuitting the session...\n" + "-"*20 +
              "\nThank you for using PDB-parser!\n" + "-"*20 +
              "\nBe sure to check it out on GitHub:\ngithub.com/nickpettican/PDB-parse\n")
@@ -209,25 +209,25 @@ def main():
         elif choice == 2:
             nothingyet()
         elif choice == 3:
-            quit()
+            quitsesh()
 
         try: 
             readypdb = reconstruct(newpdb)
-            print "\n*Successfuly reconstructed new PDB structure!*\n"
+            print "\n*Successfully reconstructed new PDB structure!*\n"
         except:
             print "\nWoops, something went wrong when reconstructing the PDB!\n"
-            quit()
+            quitsesh()
 
         try:
             outputfile(readypdb,outfile)
-            print "*Successfuly created new PDB file!*\n"
+            print "*Successfully created new PDB file!*\n"
         except:
             print "\nWoops, something went wrong when creating the PDB!\n"
-            quit()
+            quitsesh()
    
     else:
         print "\nCould not open file\nMake sure you type the correct directory and file name\n"
-        quit()
+        quitsesh()
 
 if __name__ == "__main__":
     main()
