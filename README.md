@@ -24,7 +24,7 @@ To use simply run ```python PDBparser.py``` on your Python environment, or use `
 
 ----------
 
-Feel free to fork it and collaborate! Let us contribute to the advancement of computational biology <img src="https://raw.githubusercontent.com/nicolaspettican/nicolaspettican.github.io/master/img/bioinformatics.ico"</img>.
+Feel free to fork it and collaborate! Let us contribute to the advancement of computational biology :computer: :microscope:
 
 <br />
 <center><a href="https://github.com/nickpettican/PDB-parse/blob/master/PDBparser.py"><img src="https://raw.githubusercontent.com/nickpettican/SparkzLab/master/img/code_white_small.gif" style="width: 40%; border-radius: 50%; height: auto;"></img></a></center>
