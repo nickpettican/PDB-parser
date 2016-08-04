@@ -13,22 +13,4 @@ Once I get the reconstruct() function finished I can work towards outputing a br
 
 Feel free to fork it and collaborate! Let us contribute to the advancement of computational biology. I mean, someone has to do it... :metal:
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-2">
-      <a href="http://nicolaspettican.com" style="
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        height: 0;
-        padding-bottom: 100%;
-        position: relative;
-        width: 100%;
-        background-image: url(http://www.nicolaspettican.com/img/guy_white.gif);
-        display: block;
-        height: auto;
-        max-width: 100%;
-        border-radius: 50%;"></a>
-    </div>
-  </div>
-</div>
+<center><a href="http://www.nicolaspettican.com"><img src="https://raw.githubusercontent.com/nickpettican/SparkzLab/master/img/code_white_small.gif" style="width: 40%; -moz-border-radius: 128px; border-radius: 50%; height: auto; -webkit-border-radius: 50%;"></img></a></center>
