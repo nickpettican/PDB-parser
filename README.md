@@ -1,4 +1,4 @@
-# PDB-parse
+# PDB-parser
 
 By Nicolas Pettican, for the Tabernero and Bella labs, University of Manchester.
 
