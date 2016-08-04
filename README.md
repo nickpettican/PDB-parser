@@ -12,7 +12,7 @@ By Nicolas Pettican, for the Tabernero and Bella labs, University of Manchester.
 
 The PDB format is kind of special in that every single white space is important. So forget about importing it into Python, modify it, and outputting each column separated by a tab, it doesn't work.
 
-So I created this parser in order to modify characters that are repeated throughout the PDB file. Since there still isn't a straightforward way to e.g. add specific glycans to specific residues in a protein, you kind of have to play around with it. And that can create PDB files that have columns that need to be modified.
+I created this parser in order to modify characters that are repeated throughout the PDB file. Since there still isn't a straightforward way to e.g. add specific glycans to specific residues in a protein, you kind of have to play around with it. And that can create PDB files that have columns that need to be modified.
 
 #### Development:
 
