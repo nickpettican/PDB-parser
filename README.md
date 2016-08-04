@@ -9,7 +9,7 @@ Why can't biologists just use something easier to manipulate...? :expressionless
 
 I created this parser in order to modify some characters that are repeated throughout the PDB file. Why do I need this? Because despite all the scientific advancements, there still isn't a straightforward way to e.g. add specific glycans to specific residues in a protein. You kind of have to play around with it. And that can create PDB files that need to be modified. 
 
-Once I get the reconstruct() function finished I can work towards outputing a brand new working PDB file, maybe using a function called output() :punch:.
+I started this script on the 2nd of August, and as of today, 4th of August (at 3am :flushed:) it is FINISHED! :punch:. At least for my intents and purposes. I do want to improve its functionality, such as changing entire columns if e.g. the order of residues or atoms is wrong or broken and needs mending.
 
 Feel free to fork it and collaborate! Let us contribute to the advancement of computational biology. I mean, someone has to do it... :metal:
 
