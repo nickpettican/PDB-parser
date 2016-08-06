@@ -11,14 +11,16 @@
 import os
 import sys
 import re
+from itertools import groupby
+from operator import itemgetter
 
 # optional user input file location
 #DATADIR = raw_input("\nINPUT FILE LOCATION: ")
 #DATAFILE = raw_input("\nINPUT FILE NAME: ")
-#DATAOUT = raw_input("\nOUTPUT FILE NAME: ")
-DATADIR = "F:\MSc\RP2\DSGONgly"
-DATAFILE = "new1001.pdb"
-OUTFILE = "new1001pymod.pdb"
+#OUTFILE = raw_input("\nOUTPUT FILE NAME: ")
+DATADIR = "/Users/Priyanka/Documents/Nick/Python"
+DATAFILE = "test02.pdb"
+OUTFILE = "testmod02.pdb"
 
 
 def parse(datafile):
@@ -46,14 +48,17 @@ def lineheads(datafile):
 
 def optionsbegin(pdb):
     # options the user has
-    choice = int
-    while not (choice == 1 or choice == 2 or choice == 3):
-        choice = input("What would you like to do to the PDB file?\n" +
-                       "Here are the current options:\n" +
-                       "1. Replace a number or string    # it will replace every instance of that number or string\n" +
-                       "2. Nothing else yet...           # there will be more options in the future\n" +
-                       "3. Quit\n")
-    return choice
+    while True:
+        try:
+            choice = int(raw_input("What would you like to do to the PDB file?\n" +
+                           "Here are the current options:\n" +
+                           "Option 1 - Replace characters    # it will replace every instance of those characters\n" +
+                           "Option 2 - ATOM to HETATM        # work in progress\n" +
+                           "Option 3 - Quit\n\nOption: "))
+        except ValueError:
+            continue
+        if 1 <= choice <= 3:
+            return choice
 
 def findelement(pdb,busca):
     # finds where the elements to change are
@@ -61,13 +66,22 @@ def findelement(pdb,busca):
 
 def findrange(pdb,busca):
     rangebusca = [i for i, line in enumerate(pdb) if re.search(busca, line)]
-    return [rangebusca[0], rangebusca[-1] + 1]
+    realranges = [map(itemgetter(1), value)
+                  for i, value in groupby(enumerate(rangebusca),
+                  lambda (i, x): i-x)]
+    if len(realranges) == 1:
+        return [realranges[0][0], realranges[0][-1] + 1]
+    elif len(realranges) >= 2:
+        return [[realranges[i][0], realranges[i][-1] + 1]
+                for i, line in enumerate(realranges)]
+        #return [line[0], line[1] + 1 for line in realranges]
+    #return [rangebusca[0], rangebusca[-1] + 1]
 
 def findindex(pdb,busca):
     # finds what column the query string is
     datalist = [line.split() for line in pdb if re.search(busca, line)]
     temp = set()
-    tempupdate = [temp.add(index) for i, value in enumerate(datalist) 
+    tempupdate = [temp.add(index) for i, value in enumerate(datalist)
                   for index, l in enumerate(datalist[i], 1) if re.search(busca, l)]
     return list(temp)
 
@@ -80,7 +94,11 @@ def replacechar(pdb):
             busca = raw_input("\n*Note that it must be 3 or more characters*\t")
         instances = findelement(pdb,busca)
         rangebusca = findrange(pdb,busca)
-        print "\n%s appears %s times in lines %s to %s" %(busca, instances, rangebusca[0], rangebusca[-1])
+        print rangebusca
+        if len(rangebusca) == 1:
+            print "\n%s appears %s times in lines %s to %s" %(busca, instances, rangebusca[0][0], rangebusca[0][-1])
+        elif len(rangebusca) >= 2:
+            print "\n%s appears %s times in lines %s" %(busca, instances, rangebusca)
     except:
         print "\nWoops, can't seem to find %s\n" %(busca)
     # finds what column the query string is in
@@ -95,22 +113,25 @@ def replacechar(pdb):
                 quitsesh()
     except:
         print "\nWoops, can't seem to find %s's location\n" %(busca)
-    # THE REPLACING SECTION, under development
+    # THE REPLACING SECTION
     try:
         cambia = raw_input("Insert number or string you want to replace it with:\t")
         if len(busca) == len(cambia):
             newpdb = replace(pdb,busca,cambia)
             return newpdb
         else:
-            print ("\nYou can't replace a string of different size...\n" +
-                   "it will break the PDB file!\n")
-            quitsesh()
+            print ("\nReplacing a string of different size may break the PDB.\n")
+            if continuar():
+                newpdb = replace(pdb,busca,cambia)
+                return newpdb
+            else:
+                quitsesh()
     except:
         print "\nWoops, something went wrong\n"
         quitsesh()
 
 def replace(pdb,busca,cambia):
-    # THE REPLACING FUNCTION, under development
+    # THE REPLACING FUNCTION
     # note that this will break the pdb into individual characters
     # pdbchars has all the lines broken into individual characters
     # for some reason it struggles with busca <= 3
@@ -119,22 +140,21 @@ def replace(pdb,busca,cambia):
     buscachars = [l.strip() for l in busca]
     cambiachars = [l.strip() for l in cambia]
     rangebusca = findrange(pdb,busca)
-    
+
     begin = 100   # just as a default
     end = 101     # just as a default
 
-    # I really don't like nested code...
-    # but it could be worse!
+    # not a big fan of nested code...
     newpdb = []
-    counter = 0
-    for line in pdbchars:
+    for counter, line in enumerate(pdbchars):
         newline = []
         b = 0
         charcount = 0
-        if counter not in range(rangebusca[0], rangebusca[-1]):
+        if checkinrange(counter,rangebusca) == True:
             for char in line:
                 newline.append(char)
-        else:
+        elif checkinrange(counter,rangebusca) == False:
+            print "yes\n"
             for char in line:
                 check = 0
                 if line[charcount] == buscachars[0] and line[charcount + 1] == buscachars[1]:
@@ -152,10 +172,21 @@ def replace(pdb,busca,cambia):
                     newline.append(char)
                 charcount += 1
                 b += 1
-        counter += 1
         newpdb.append(newline)
 
     return newpdb
+
+def checkinrange(counter,rangebusca):
+    if len(rangebusca) == 1:
+        if counter not in range(rangebusca[0][0], rangebusca[0][-1]):
+            return True
+    elif len(rangebusca) >= 2:
+        for l in rangebusca:
+            for value in range(l[0], l[-1]):
+                if counter != value:
+                    return True
+    else:
+        return False
 
 def reconstruct(newpdb):
     # reconstruct the "replaced" lines with the appropriate spacing
@@ -170,15 +201,15 @@ def reconstruct(newpdb):
         readypdb.append(newline)
     return ["".join(str(x) for x in line) for line in readypdb]
 
-def outputfile(readypdb,outfile):    
+def outputfile(readypdb,outfile):
     with open(outfile, 'w') as output:
         output.writelines(str(i) + "\n" for i in readypdb)
         #output.write('\n'.join(str(i)) for i in readypdb)
 
 def nothingyet():
     # just some of my nonesense :grin:
-    print ("\nNot much else going on here for now,\n" +
-           "I want to add a 'replace entire column' option,\n" +
+    print ("\nCurrently working on ATOM to HETATM conversion\n" +
+           "I also want to add a 'replace entire column' option,\n" +
            "but I could use some help to increase functionality,\n" +
            "so be sure to fork it on github :D\n")
     sys.exit("\n\nQuitting the session...\n" + "-"*20 +
@@ -211,7 +242,7 @@ def main():
         elif choice == 3:
             quitsesh()
 
-        try: 
+        try:
             readypdb = reconstruct(newpdb)
             print "\n*Successfully reconstructed new PDB structure!*\n"
         except:
@@ -224,10 +255,13 @@ def main():
         except:
             print "\nWoops, something went wrong when creating the PDB!\n"
             quitsesh()
-   
+
     else:
         print "\nCould not open file\nMake sure you type the correct directory and file name\n"
         quitsesh()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        quitsesh()
