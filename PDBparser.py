@@ -18,7 +18,7 @@ from operator import itemgetter
 #DATADIR = raw_input("\nINPUT FILE LOCATION: ")
 #DATAFILE = raw_input("\nINPUT FILE NAME: ")
 #OUTFILE = raw_input("\nOUTPUT FILE NAME: ")
-DATADIR = "/Users/Priyanka/Documents/Nick/Python"
+DATADIR = "F:\MSc\RP2\PyTests"
 DATAFILE = "test02.pdb"
 OUTFILE = "testmod02.pdb"
 
@@ -70,7 +70,7 @@ def findrange(pdb,busca):
                   for i, value in groupby(enumerate(rangebusca),
                   lambda (i, x): i-x)]
     if len(realranges) == 1:
-        return [realranges[0][0], realranges[0][-1] + 1]
+        return [[realranges[0][0], realranges[0][-1] + 1]]
     elif len(realranges) >= 2:
         return [[realranges[i][0], realranges[i][-1] + 1]
                 for i, line in enumerate(realranges)]
@@ -94,14 +94,14 @@ def replacechar(pdb):
             busca = raw_input("\n*Note that it must be 3 or more characters*\t")
         instances = findelement(pdb,busca)
         rangebusca = findrange(pdb,busca)
-        print rangebusca
+        # PRINTS THE RANGE
         if len(rangebusca) == 1:
             print "\n%s appears %s times in lines %s to %s" %(busca, instances, rangebusca[0][0], rangebusca[0][-1])
         elif len(rangebusca) >= 2:
             print "\n%s appears %s times in lines %s" %(busca, instances, rangebusca)
     except:
         print "\nWoops, can't seem to find %s\n" %(busca)
-    # finds what column the query string is in
+    # PRINTS THE COLUMN LOCATION OF QUERY
     try:
         indexloc = findindex(pdb,busca)
         if len(indexloc) < 2:
@@ -134,7 +134,6 @@ def replace(pdb,busca,cambia):
     # THE REPLACING FUNCTION
     # note that this will break the pdb into individual characters
     # pdbchars has all the lines broken into individual characters
-    # for some reason it struggles with busca <= 3
 
     pdbchars = [[l.strip() for l in line] for line in pdb]
     buscachars = [l.strip() for l in busca]
@@ -144,17 +143,18 @@ def replace(pdb,busca,cambia):
     begin = 100   # just as a default
     end = 101     # just as a default
 
-    # not a big fan of nested code...
+    # here, some nested code
     newpdb = []
     for counter, line in enumerate(pdbchars):
         newline = []
         b = 0
         charcount = 0
-        if checkinrange(counter,rangebusca) == True:
+        checkifrange = checkinrange(counter,rangebusca)
+        # check if current row is in the the "replacing" range
+        if checkifrange[0] == True:
             for char in line:
                 newline.append(char)
-        elif checkinrange(counter,rangebusca) == False:
-            print "yes\n"
+        elif checkifrange[0] == False:
             for char in line:
                 check = 0
                 if line[charcount] == buscachars[0] and line[charcount + 1] == buscachars[1]:
@@ -178,15 +178,13 @@ def replace(pdb,busca,cambia):
 
 def checkinrange(counter,rangebusca):
     if len(rangebusca) == 1:
-        if counter not in range(rangebusca[0][0], rangebusca[0][-1]):
-            return True
+        return [True if counter not in range(rangebusca[0][0], rangebusca[0][-1]) else False]
     elif len(rangebusca) >= 2:
-        for l in rangebusca:
-            for value in range(l[0], l[-1]):
-                if counter != value:
-                    return True
-    else:
-        return False
+        isit = 0
+        for r in rangebusca:
+            if counter not in range(r[0], r[-1]):
+                isit += 1
+        return [True if isit == len(rangebusca) else False]
 
 def reconstruct(newpdb):
     # reconstruct the "replaced" lines with the appropriate spacing
@@ -217,7 +215,7 @@ def nothingyet():
 
 def continuar():
     # the "are you sure?" function
-    return raw_input("\nContinue? [yes|no]\t").lower().startswith('y')
+    return raw_input("Continue? [yes|no]\t").lower().startswith('y')
 
 def quitsesh():
     # quit, of course
