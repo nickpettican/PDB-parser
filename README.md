@@ -21,13 +21,13 @@ I created this parser in order to modify characters that are repeated throughout
 
 #### Development:
 
-At least for my intents and purposes it is finished. However, I do want to improve its functionality, such as changing entire columns if e.g. the order of residues or atoms is wrong or broken and needs mending, or remove the second protein if you have a double protein PDB file.
+At the moment I am working on increasing its functionality. My next feat will be to add the option "change ATOM to HETATM" for when you have Ca2+ ions and glycans and want to convert them into HETATM so that Molecular Dynamics Simulation programs can identify these elements. Future options may include changing entire columns if e.g. the order of residues or atoms is wrong or broken and needs mending, or remove the second protein if you have a double protein PDB file.
 
 <br />
 
 #### Usage:
 
-To use simply run ```python PDBparser.py``` on your Python environment, or use ```PDBparser.ipynb``` in a iPython or [jupyter notebook](http://jupyter.readthedocs.io/en/latest/install.html). You may want to edit DATADIR, DATAFILE and OUTFILE to your requirements before running.
+To use simply run ```python PDBparser.py``` on your Python environment, or open ```PDBparser.ipynb``` in a iPython or [jupyter notebook](http://jupyter.readthedocs.io/en/latest/install.html). You may want to edit DATADIR, DATAFILE and OUTFILE to your requirements before running.
 
 <br />
 <br />
