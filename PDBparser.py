@@ -1,12 +1,21 @@
 #!/usr/bin/env python
 
-#########################
-#                       #
-#      PDB-parser       #
-#                       #
-#  by Nicolas Pettican  #
-#                       #
-#########################
+'''                     
+    Copyright 2016 Nicolas Pettican
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+'''
 
 import os
 import sys
@@ -32,13 +41,22 @@ def parse(datafile):
 
 def welcome():
     # opening credits
-    print ("#" * 25 + "\n#\t\t\t#\n#\tPDB-parser\t#" + "\n#\t\t\t#" +
-           "\n#  by Nicolas Pettican  #" + "\n#\t\t\t#\n" + "#" *25 + "\n")
+    print ('''
+ ____  ____  ____                                 
+|  _ \|  _ \| __ ) _ __   __ _ _ __ ___  ___ _ __ 
+| |_) | | | |  _ \| '_ \ / _` | '__/ __|/ _ \ '__|
+|  __/| |_| | |_) | |_) | (_| | |  \__ \  __/ |   
+|_|   |____/|____/| .__/ \__,_|_|  |___/\___|_|   
+                  |_|                             
+                         by Nicolas Pettican
+    ''')
+    #print ("#" * 25 + "\n#\t\t\t#\n#\tPDB-parser\t#" + "\n#\t\t\t#" +
+    #       "\n#  by Nicolas Pettican  #" + "\n#\t\t\t#\n" + "#" *25 + "\n")
 
 def lineheads(datafile):
     # finds and prints the different elements in line[0]
     data = [line.strip().split() for line in open(datafile, 'r')]
-    print "\nThe file has %s lines\n" %(len(data))
+    print "The file has %s lines\n" %(len(data))
     lineheadset = set()
     for line in data:
         if line[0] != "END":
@@ -55,8 +73,8 @@ def optionsbegin(pdb):
             choice = int(raw_input("What would you like to do to the PDB file?\n" +
                            "Here are the current options:\n\n" +
                            "Option 1 - Replace characters    # it will replace every instance of those characters\n" +
-                           "Option 2 - ATOM to HETATM        # work in progress\n" + 
-                           "Option 3 - HETATM to ATOM        # work in progress\n" +
+                           "Option 2 - ATOM to HETATM        # converts user-chosen ATOMs to HETATMs\n" + 
+                           "Option 3 - HETATM to ATOM        # converts user-chosen HETATMs to ATOMs\n" +
                            "Option 4 - Future options        # future options will be available\n" +
                            "Option 5 - Quit\n\nOption: "))
         except ValueError:
@@ -196,7 +214,7 @@ def atomtohet(pdb,option):
         busca = checkforadefault(pdb)
         column = int(findindex(pdb,busca)[0] - 1)
     except:
-        print "\nAn error occurred within checkforadefault()\n"
+        print "\nAn error occurred within checkforadefault()!\n"
     lineheadset = set()
     # finds the elements available to substitute
     try:
@@ -207,29 +225,32 @@ def atomtohet(pdb,option):
             x = [line[column].count(element) for line in data if len(line) > column]
             print "\nFound {y} element {x} times".format(x=x.count(1), y=element)
     except:
-        print "\nWoops, could not find elements other than amino acids\n"
+        print "\nWoops, could not find elements other than amino acids!\n"
         quitsesh()
     # user chooses which elements to substitute
     try:
         chosen = atomhetoptions(lineheadset)
     except:
-        print "\nWoops, failed to find elements\n"
+        print "\nWoops, failed to find elements!\n"
         quitsesh()
     # find the range of user-input elements
     try:
         rawrange = [findrange(pdb,busca) for busca in chosen]
         convertrange = [x for i in rawrange for x in i]
     except:
-        print "\nWoops, could not find range\n"
+        print "\nWoops, could not find range!\n"
     # THE REPLACING SECTION
-    if option == 1:
-        busca = "ATOM  "
-        cambia = "HETATM"
-    elif option == 2:
-        cambia = "ATOM  "
-        busca = "HETATM"
-    newpdb = replace(pdb,busca,cambia,convertrange,option)
-    return newpdb
+    try:
+        if option == 1:
+            busca = "ATOM  "
+            cambia = "HETATM"
+        elif option == 2:
+            cambia = "ATOM  "
+            busca = "HETATM"
+        newpdb = replace(pdb,busca,cambia,convertrange,option)
+        return newpdb
+    except:
+        print "\nWoops, failed to replace!\n"
     
 def checkforadefault(pdb):
     # fun fact, these bellow are the most abundant amino acids in proteins
@@ -331,7 +352,7 @@ def main():
             quitsesh()
     # if user inpyted wrong file info
     else:
-        print "\nCould not open file\nMake sure you type the correct directory and file name\n"
+        print "\nWoops, could not open file!\nMake sure you type the correct directory and file name!\n"
         quitsesh()
 
 if __name__ == "__main__":
