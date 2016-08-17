@@ -28,8 +28,8 @@ from operator import itemgetter
 #DATAFILE = raw_input("\nINPUT FILE NAME: ")
 #OUTFILE = raw_input("\nOUTPUT FILE NAME: ")
 DATADIR = "G:\MSc\RP2\PyTests"
-DATAFILE = "5erdB.pdb"
-OUTFILE = "5erdtest.pdb"
+DATAFILE = "eCad_Ca_Nlinked.pdb"
+OUTFILE = "eCadNglymod.pdb"
 AAS = ["ALA", "ARG", "ASN", "ASP", "CYS", "GLN", "GLY", 
       "HIS", "ILE", "LEU", "LYS", "MET", "PHE", "PRO", 
       "SER", "THR", "TRP", "TYR", "VAL", "GLU"]
@@ -74,9 +74,10 @@ def optionsbegin(pdb):
                            "Here are the current options:\n\n" +
                            "Option 1 - Replace characters    # it will replace every instance of those characters\n" +
                            "Option 2 - ATOM to HETATM        # converts user-chosen ATOMs to HETATMs\n" + 
-                           "Option 3 - HETATM to ATOM        # converts user-chosen HETATMs to ATOMs\n" +
-                           "Option 4 - Future options        # future options will be available\n" +
-                           "Option 5 - Quit\n\nOption: "))
+                           "Option 3 - HETATM to ATOM        # converts user-chosen HETATMs to ATOMs\n" + 
+                           "Option 4 - Change chain ID       # changes chain ID e.g. A to B\n" +
+                           "Option 5 - Future options        # future options will be available\n" +
+                           "Option 6 - Quit\n\nOption: "))
         except ValueError:
             continue
         if 1 <= choice <= 5:
@@ -276,6 +277,27 @@ def atomhetoptions(lineheadset):
         print "\nElement %s found" %(element)
     return [element for element in set(buscaset)]
 
+def changechain(pdb):
+    # by default the chain ID should be in char 22 (21 in python counting)
+    print ("\nWarning: this function will change the chain ID for the whole PDB file\n" + 
+           "Work in progress to add ranges, targetting only specific elements\n")
+    pdbchars = [[l.strip() for l in line] for line in pdb]
+    newpdb = []
+    for line in pdbchars:
+        if len(line) > 77 and line[21]:
+            print "\nThe current chain ID is %s\n" %(line[21])
+            break
+    chainnew = raw_input("\nChoose which chain ID you want: ")
+    for line in pdbchars:
+        newline = []
+        for counter, char in enumerate(line):
+            if counter == 21:
+                newline.append(chainnew)
+            else:
+                newline.append(char)
+        newpdb.append(newline)
+    return newpdb
+
 def reconstruct(newpdb):
     # reconstruct the "replaced" lines with the appropriate spacing
     readypdb = []
@@ -324,6 +346,7 @@ def main():
         lineheads(datafile)
         # GIVE USER OPTIONS
         choice = optionsbegin(pdb)
+        # calculations depending on choice
         if choice == 1:
             newpdb = replacechar(pdb)
         elif choice == 2:
@@ -333,8 +356,10 @@ def main():
             option = 2
             newpdb = atomtohet(pdb,option)
         elif choice == 4:
-            nothingyet()
+            newpdb = changechain(pdb)
         elif choice == 5:
+            nothingyet()
+        elif choice == 6:
             quitsesh()
         # RECONSTRUCT NEW PDB
         try:
